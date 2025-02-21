@@ -679,6 +679,10 @@ func createStartServiceOperation(
 			logsCollectorLabels,
 		)
 
+        bindMounts := make(map[string]string)
+        bindMounts["/var/run/docker.sock"] = "/var/run/docker.sock"
+        bindMounts["/risc0workdir"] = "/risc0workdir"
+
 		createAndStartArgsBuilder := docker_manager.NewCreateAndStartContainerArgsBuilder(
 			containerImageName,
 			containerName.GetString(),
@@ -703,6 +707,8 @@ func createStartServiceOperation(
 			tiniEnabled,
 		).WithVolumeMounts(
 			volumeMounts,
+		).WithBindMounts(
+            bindMounts,
 		).WithLoggingDriver(
 			fluentdLoggingDriverCnfg,
 		).WithRestartPolicy(
